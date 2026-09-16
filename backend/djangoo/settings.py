@@ -15,9 +15,11 @@ if _env_path.exists():
             _key, _value = _line.split('=', 1)
             os.environ.setdefault(_key.strip(), _value.strip())
 
-SECRET_KEY = 'django-insecure-replace-me'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-replace-me')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(',') if h.strip()] or ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
